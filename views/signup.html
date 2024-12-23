@@ -17,12 +17,7 @@
         <div class="col">
           <form id="signupform">
             <label for="username" class="form-label">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-            />
+            <input type="text" class="form-control" id="username" name="username"/>
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" />
             <label for="phone" class="form-label">Phone No.</label>
@@ -44,5 +39,28 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"
+      integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      const signup=document.querySelector('#signupform');
+      signup.addEventListener('submit',async(event)=>{
+        event.preventDefault();
+        try{
+        const name=event.target.username.value;
+        const email=event.target.email.value;
+        const phone=event.target.phone.value;
+        const password=event.target.password.value;
+        const obj={name,email,phone,password}
+        const result= await axios.post('http://localhost:3000/signup',obj);
+        console.log('Data posted successfull!',result);
+        }catch(err){
+          console.log('Error in signup ',err)
+        }
+      })
+    </script>
   </body>
 </html>
