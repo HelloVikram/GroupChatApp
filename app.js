@@ -5,7 +5,10 @@ const userroute=require('./routes/user');
 const cors=require('cors');
 const app=express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin:"*",
+    methods:['GET','POST']
+}));
 app.use(userroute);
 async function database() {
     try{
