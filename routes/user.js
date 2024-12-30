@@ -2,8 +2,9 @@ const express=require('express');
 const bcrypt=require('bcrypt');
 const user=require('../models/user');
 const router=express.Router();
+const jwt=require('jsonwebtoken');
 
-router.post('/signup',async(req,res,next)=>{
+router.post('/user/signup',async(req,res,next)=>{
     const {name,email,phone,password}=req.body;
     try{
         if(!name||!email||!phone||!password)
@@ -21,4 +22,30 @@ router.post('/signup',async(req,res,next)=>{
        res.status(500).json({success:false,message:'Error in Adding data!!',Error:err})
     }
 })
+
+router.post('/user/login', async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+        const User = await user.findOne({ where: { email } });
+        if (!User) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(password, User.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'Incorrect Password' });
+        }
+
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+        );
+
+        return res.status(200).json({ success: true, token });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
 module.exports=router

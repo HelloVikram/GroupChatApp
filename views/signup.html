@@ -55,7 +55,7 @@
         const phone=event.target.phone.value;
         const password=event.target.password.value;
         const obj={name,email,phone,password}
-        const result= await axios.post('http://localhost:3000/signup',obj);
+        const result= await axios.post('http://localhost:3000/user/signup',obj);
         if(result.status==200){
           alert('User already exists,Please Login!');
         }
