@@ -14,5 +14,16 @@ router.post('/message',authenticate.authenticate,async(req,res,next)=>{
         res.status(500).json({success:false,message:'Error in  adding chat  to database!'}); 
     }
 })
-
+router.get('/getmessages',authenticate.authenticate,async(req,res,next)=>{
+    const userId=req.user.id;
+    try{
+        const result=await chatdb.findAll({
+        where:{userId:userId},
+        attributes:['chat']
+    })
+        res.status(200).json({status:true,message:'Data fetched from database successfully',data:result});
+    }catch(err){
+        res.status(500).json({status:false,message:'Error in fetching data from database'});
+    }   
+})
 module.exports=router;
