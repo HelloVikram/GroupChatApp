@@ -8,7 +8,6 @@ const authenticate= async(req,res,next)=>{
     }
     try{
     const decoded=jwt.verify(token,process.env.JWT_SECRET);
-    
     const User = await user.findByPk(decoded.id);
     if (!User) {
       return res.status(404).json({ success: false, message: "User not found" });

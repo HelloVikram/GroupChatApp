@@ -36,17 +36,22 @@
             <div class="small bg-light text-dark py-1 px-2 rounded mb-1">You: Hi there</div>
             <div class="small bg-light text-dark py-1 px-2 rounded mb-1">Vaibhav: What is up?</div>
             <div class="small bg-light text-dark py-1 px-2 rounded mb-1">Vaibhav: All good</div>
+            <div id="messagesContainer">
+                
+            </div>
           </div>
-          
-    
-        <div class="bg-dark text-light p-3 d-flex align-items-center">
-          <input
-            type="text"
-            class="form-control me-2"
-            placeholder="Type your message..."
-          />
-          <button class="btn btn-light">Send</button>
-        </div>
+          <div class="bg-dark text-light p-3">
+            <form id="sendid" class="d-flex align-items-center">
+              <input
+                id="messageid"
+                name="messageid"
+                type="text"
+                class="form-control me-2"
+                placeholder="Type your message..."
+              />
+              <button type="submit" class="btn btn-light">Send</button>
+            </form>
+          </div>          
       </div>
  <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -58,6 +63,7 @@
     integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
-  ></script>   
+  ></script>
+  <script src="chatapp.js"></script> 
 </body>
 </html>
