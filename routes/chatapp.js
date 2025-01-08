@@ -1,6 +1,7 @@
 const express=require('express');
 const router=express.Router();
 const chatdb=require('../models/chatapp');
+const userdb=require('../models/user');
 const authenticate=require('../middleware/authenticate');
 
 router.post('/message',authenticate.authenticate,async(req,res,next)=>{
@@ -18,8 +19,11 @@ router.get('/getmessages',authenticate.authenticate,async(req,res,next)=>{
     const userId=req.user.id;
     try{
         const result=await chatdb.findAll({
-        where:{userId:userId},
-        attributes:['chat']
+        attributes:['chat'],
+        include:[{
+            model:userdb,
+            attributes:['name']
+        }]
     })
         res.status(200).json({status:true,message:'Data fetched from database successfully',data:result});
     }catch(err){

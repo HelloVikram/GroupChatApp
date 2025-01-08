@@ -14,9 +14,9 @@ sendid.addEventListener('submit',async(e)=>{
     }catch(err){
         console.log(err);
     }
-    
+    e.target.reset();
 })
-document.addEventListener('DOMContentLoaded',async(e)=>{
+const getmessages=async ()=>{
     const token=localStorage.getItem('token');
         try {
             const response = await axios.get(`${endpoint}/getmessages`,{
@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded',async(e)=>{
                 Authorization:`Bearer ${token}`
             }
         });
-        console.log(response.data.data);
             if (response.status==200) {
                 const messageList = document.getElementById('messagesContainer');
                 messageList.innerHTML = ''; 
                 response.data.data.forEach(message => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = message.chat;
+                    listItem.textContent = `${message.user.name}: ${message.chat}`;
+                    listItem.className='small bg-light text-dark py-1 px-2 rounded mb-1';
                     messageList.appendChild(listItem);
                 });
             }
@@ -38,4 +38,4 @@ document.addEventListener('DOMContentLoaded',async(e)=>{
             console.error('Error fetching messages:', error);
         }
     }
-)
+setInterval(getmessages,1000);
