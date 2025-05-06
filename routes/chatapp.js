@@ -25,7 +25,7 @@ router.get('/getmessages',authenticate.authenticate,async(req,res,next)=>{
             attributes:['name']
         }]
     })
-        res.status(200).json({status:true,message:'Data fetched from database successfully',data:result});
+        res.status(200).json({status:true,message:'Data fetched from database successfully',MessageData:result});
     }catch(err){
         res.status(500).json({status:false,message:'Error in fetching data from database'});
     }   

@@ -1,41 +1,40 @@
-const endpoint=`http://localhost:3000`
-const sendid=document.getElementById('sendid');
-sendid.addEventListener('submit',async(e)=>{
+const endpoint = `http://localhost:3000`
+const send = document.getElementById('messageform');
+send.addEventListener('submit', async (e) => {
     e.preventDefault();
-    try{
-        const token=localStorage.getItem('token');
-        const message=e.target.messageid.value;
-        const result=await axios.post(`${endpoint}/message`,{message},{
-            headers:{
-                Authorization:`Bearer ${token}`
+    try {
+        const token = localStorage.getItem('token');
+        const message = e.target.messageid.value;
+        const result = await axios.post(`${endpoint}/message`, { message }, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
         console.log(result);
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
     e.target.reset();
 })
-const getmessages=async ()=>{
-    const token=localStorage.getItem('token');
-        try {
-            const response = await axios.get(`${endpoint}/getmessages`,{
-            headers:{
-                Authorization:`Bearer ${token}`
+const getmessages = async () => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await axios.get(`${endpoint}/getmessages`, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
-            if (response.status==200) {
-                const messageList = document.getElementById('messagesContainer');
-                messageList.innerHTML = ''; 
-                response.data.data.forEach(message => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${message.user.name}: ${message.chat}`;
-                    listItem.className='small bg-light text-dark py-1 px-2 rounded mb-1';
-                    messageList.appendChild(listItem);
-                });
-            }
-        } catch (error) {
-            console.error('Error fetching messages:', error);
+        if (response.status == 200) {
+            const messagecontainer = document.getElementById('messageContainer');
+            response.data.MessageData.forEach(x => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'bg-light p-2 m-2 border';
+                messageDiv.innerHTML= `<strong>${x.user.name}</strong>:${x.chat}`;
+                messagecontainer.appendChild(messageDiv);
+            });
         }
+    } catch (error) {
+        console.error('Error fetching messages:', error);
     }
-setInterval(getmessages,1000);
+}
+ setInterval(getmessages,1000);

@@ -11,6 +11,10 @@ const loginform=document.getElementById('loginform');
            }
            alert(' Login successfull');
         }catch(err){
+            if(err.response){
+              if(err.response.status==404||err.response.status==401||err.response.status==500)
+                alert(err.response.data.message);
+            }
             console.log('Error in Login form',err);
         }
         e.target.reset();

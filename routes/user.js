@@ -17,7 +17,7 @@ router.post('/user/signup',async(req,res,next)=>{
         const hash=await bcrypt.hash(password,saltRounds);
         await user.create({name,email,phone,password:hash});
     
-        res.status(201).json({success:true,message:'Data added successfully!'})
+        res.status(201).json({success:true,message:'Signup Successfull!'})
     }catch(err){
        res.status(500).json({success:false,message:'Error in Adding data!!',Error:err})
     }
