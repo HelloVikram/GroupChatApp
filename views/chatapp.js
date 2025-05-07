@@ -26,15 +26,17 @@ const getmessages = async () => {
         });
         if (response.status == 200) {
             const messagecontainer = document.getElementById('messageContainer');
+            messagecontainer.textContent='';
             response.data.MessageData.forEach(x => {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'bg-light p-2 m-2 border';
                 messageDiv.innerHTML= `<strong>${x.user.name}</strong>:${x.chat}`;
                 messagecontainer.appendChild(messageDiv);
             });
+            messagecontainer.scrollTop=messagecontainer.scrollHeight;
         }
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
 }
- setInterval(getmessages,1000);
+setInterval(getmessages,1000);
