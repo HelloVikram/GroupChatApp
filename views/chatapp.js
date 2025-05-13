@@ -4,7 +4,7 @@ const send = document.getElementById('messageform');
 const loadOldMessages= ()=>{
     const localmessages=JSON.parse(localStorage.getItem('messages'))||[];
     const messagecontainer = document.getElementById('messageContainer');
-    messagecontainer.textContent='';
+    messagecontainer.innerHTML='';
     localmessages.forEach(x => {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'bg-light p-2 m-2 border';
