@@ -34,9 +34,9 @@ const creategroup = async (req, res, next) => {
             },
             attributes: ['id']
         })
-        const memberusers = [{ userId: adminid, groupId: groupId }];
+        const memberusers = [{ userId: adminid, groupId: groupId,isAdmin:true }];
         membersid.forEach(user => {
-            memberusers.push({ userId: user.id, groupId: groupId });
+            memberusers.push({ userId: user.id, groupId: groupId,isAdmin:false });
         });
         const membersresult = await groupmembers.bulkCreate(memberusers);
         res.status(201).json({ success: true, 'group': groupresult, 'members': membersresult });

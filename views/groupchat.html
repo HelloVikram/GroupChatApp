@@ -49,6 +49,15 @@
         <div class="col-md-9 bg-light p-3">
           <div class="mb-3">
             <h5 id="grouptitle">Select a group</h5>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              id="manageMembersBtn"
+              data-bs-toggle="modal"
+              data-bs-target="#manageModal"
+              style="display: none"
+            >
+              Manage Members
+            </button>
           </div>
           <div id="messageContainer" class="mb-3"></div>
           <form id="messageForm" class="row">
@@ -101,6 +110,39 @@
         </div>
       </div>
     </div>
+    <!-- Manage Group Modal -->
+    <div
+      id="ManageGroupModal"
+      class="modal fade"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Manage Group Members</h5>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <input
+              type="text"
+              class="form-control mb-2"
+              id="addMembersInput"
+              placeholder="Add members by email, comma-separated"
+            />
+            <button id="addMembersBtn" class="btn btn-primary btn-sm mb-3">
+              Add Members
+            </button>
+            <ul id="groupMembersList" class="list-group"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

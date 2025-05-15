@@ -4,6 +4,7 @@ const db=require('./util/database');
 const userroute=require('./routes/user');
 const chatapproute=require('./routes/chatapp');
 const groupchatroute=require('./routes/groupchat');
+const adminrotes=require('./routes/admin');
 
 const chatdb=require('./models/chatapp');
 const userdb=require('./models/user');
@@ -39,6 +40,9 @@ messagesdb.belongsTo(groupsdb);
 app.use(userroute);
 app.use(chatapproute);
 app.use(groupchatroute);
+app.use(adminrotes);
+
+
 async function database() {
     try{
      await db.sync({force:false})

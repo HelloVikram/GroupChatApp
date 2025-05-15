@@ -15,6 +15,10 @@ const groupmembers=sequelize.define('groupmembers',{
     groupId:{
         type:Sequelize.INTEGER,
         allowNull:false
+    },
+    isAdmin:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false
     }
 })
 
