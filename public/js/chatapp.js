@@ -56,12 +56,7 @@ messageform.addEventListener('submit', async (event) => {
         });
         const receiverId = currentUser;
         const sender = localStorage.getItem('username');
-        socket.emit('sendPersonalMessage', { senderId, sender, receiverId, message });
-        const msgElement = document.createElement('div');
-        msgElement.innerHTML = `<strong>You</strong>: ${message}`;
-        msgElement.className = `p-1 m-2 bg-light border`;
-        messageContainer.appendChild(msgElement);
-        messageContainer.scrollTop = messageContainer.scrollHeight;
+        socket.emit('sendPersonalMessage', { senderId, sender, receiverId, message, type: 'text' });
         event.target.reset();
     } catch (err) {
         console.log(err)
@@ -89,7 +84,11 @@ const getmessages = async (currentUser) => {
                 if (localStorage.getItem('username') == name) {
                     newname = 'You';
                 }
-                msgElement.innerHTML = `<strong>${newname}</strong>: ${chat}`;
+                let displayMessage = chat;
+                if (chat.includes('cloudinary.com')) {
+                    displayMessage = `<a href="${chat}" target="_blank" rel="noopener noreferrer">Download File</a>`;
+                }
+                msgElement.innerHTML = `<strong>${newname}</strong>: ${displayMessage}`;
                 msgElement.className = `p-1 m-2 bg-light border`
                 messageContainer.appendChild(msgElement);
             });
@@ -99,16 +98,58 @@ const getmessages = async (currentUser) => {
         console.error('Error fetching messages:', error);
     }
 }
+//file upload
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    if (!file) return alert('Please select a file.');
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const token = localStorage.getItem('token');
+        const res = await axios.post(`${endpoint}/upload?receiverId=${currentUser}`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        const fileUrl = res.data.fileUrl;
+
+        // Send file URL as a message via socket
+        socket.emit('sendPersonalMessage', {
+            senderId,
+            sender: localStorage.getItem('username'),
+            receiverId: currentUser,
+            message: fileUrl,
+            type: 'file'
+        });
+        fileInput.value = '';
+
+    } catch (err) {
+        console.log('Upload error:', err);
+        alert('File upload failed. Please try again.');
+    }
+});
+
 //io logic
 socket.on('sendPersonalMessage', data => {
     const msgElement = document.createElement('div');
     let newname = data.sender;
-    let chat = data.message;
-    if (localStorage.getItem('username') == newname) {
+    let displayMessage = data.message;
+
+    if (localStorage.getItem('username') === newname) {
         newname = 'You';
     }
-    msgElement.innerHTML = `<strong>${newname}</strong>: ${chat}`;
-    msgElement.className = `p-1 m-2 bg-light border`
+
+    // If message is a file, create a download link
+    if (data.type === 'file') {
+        displayMessage = `<a href="${data.message}" target="_blank" rel="noopener noreferrer">Download File</a>`;
+    }
+
+    msgElement.innerHTML = `<strong>${newname}</strong>: ${displayMessage}`;
+    msgElement.className = 'p-1 m-2 bg-light border';
     messageContainer.appendChild(msgElement);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 });

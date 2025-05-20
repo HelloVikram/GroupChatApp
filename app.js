@@ -109,15 +109,28 @@ io.on('connection', socket => {
         console.log(`${userId} has joinded personal chat`);
     })
 
-    socket.on('sendPersonalMessage',data=>{
-        const{senderId,sender,receiverId,message}=data;
-        io.to(receiverId).emit('sendPersonalMessage',{
-            senderId,
-            sender,
-            message
-        });
-        console.log(`${senderId}send msg to ${receiverId}`);
-    })
+    socket.on('sendPersonalMessage', data => {
+    const { senderId, sender, receiverId, message, type } = data;
+
+    // Emit to receiver
+    io.to(receiverId).emit('sendPersonalMessage', {
+        senderId,
+        sender,
+        message,
+        type
+    });
+
+    // Emit back to sender so sender sees their own message immediately
+    io.to(senderId).emit('sendPersonalMessage', {
+        senderId,
+        sender,
+        message,
+        type
+    });
+
+    console.log(`${senderId} sent msg to ${receiverId}`);
+});
+
 
     socket.on('disconnect', () => {
         if (currentUser) {
@@ -142,6 +155,7 @@ app.get('/groupchat.html',(req,res)=>{
 app.get('/chatapp.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'chatapp.html'));
 });
+
 
 //start server
 const PORT = process.env.PORT || 3000;

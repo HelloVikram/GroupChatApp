@@ -1,6 +1,7 @@
 const personalchatdb = require('../models/personalChats');
 const userdb = require('../models/user');
 const { Op } = require('sequelize');
+const {uploadOnCloudinary}=require('../util/cloudinary');
 
 const getUsers = async (req, res, next) => {
     const userId=req.user.id;
@@ -59,5 +60,19 @@ const getmessages = async (req, res, next) => {
     }
 }
 
+const upLoad=async(req, res) => {
+    const senderId=req.user.id;
+    const {receiverId}=req.query;
+    try{
+       if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+       const response= await uploadOnCloudinary(req.file.path);
+        await personalchatdb.create({ senderId, receiverId, chat: response.url });
+       res.status(200).json({ fileUrl: response.url });
+    }catch(err){
+        console.log('error in upload controller',err);
+        res.status(500).json({error:err});
+    }
+    
+}
 
-module.exports = { messages, getmessages, getUsers };
+module.exports = { messages, getmessages, getUsers ,upLoad};
