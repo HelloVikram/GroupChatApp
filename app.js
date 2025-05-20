@@ -1,5 +1,9 @@
 const express = require('express');
 require('dotenv').config();
+
+const cron = require('node-cron');
+const { archiveOldPersonalMessages } = require('./util/archive');
+
 const db = require('./util/database');
 const userroute = require('./routes/user');
 const chatapproute = require('./routes/chatapp');
@@ -37,6 +41,11 @@ app.use(cors({
 }));
 
 app.use(express.static(path.join(__dirname,'public')));
+
+cron.schedule('0 3 * * *', () => {
+  console.log('Running nightly archive job for personal messages...');
+  archiveOldPersonalMessages();
+});
 
 userdb.hasMany(chatdb);
 chatdb.belongsTo(userdb);
