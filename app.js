@@ -42,7 +42,7 @@ app.use(cors({
 
 app.use(express.static(path.join(__dirname,'public')));
 
-cron.schedule('0 3 * * *', () => {
+cron.schedule('0 1 * * *', () => {
   console.log('Running nightly archive job for personal messages...');
   archiveOldPersonalMessages();
 });

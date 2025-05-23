@@ -17,7 +17,7 @@ const authenticate= async(req,res,next)=>{
     
     next();
     }catch(err){
-        res.status(400).json({success:false,message:"Error in authenticatin Invalid token",error:err})
+        res.status(403).json({success:false,message:"Error in authenticatin Invalid token",error:err})
     }
     
 }
